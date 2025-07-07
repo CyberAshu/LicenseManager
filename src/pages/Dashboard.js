@@ -102,17 +102,24 @@ const Dashboard = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
         <div className="sm:flex sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-            <p className="mt-2 text-sm text-gray-600">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Dashboard</h1>
+            <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-gray-600">
               Welcome back! Here's what's happening with your license management.
             </p>
           </div>
-          <div className="mt-4 sm:mt-0">
-            <div className="text-sm text-gray-500">
-              Last updated: {new Date().toLocaleString()}
+          <div className="mt-2 sm:mt-0">
+            <div className="text-xs sm:text-sm text-gray-500">
+              <span className="hidden sm:inline">Last updated: </span>
+              <span className="sm:hidden">Updated: </span>
+              {new Date().toLocaleString([], { 
+                month: 'short', 
+                day: 'numeric', 
+                hour: '2-digit', 
+                minute: '2-digit' 
+              })}
             </div>
           </div>
         </div>
@@ -124,34 +131,35 @@ const Dashboard = () => {
           const Icon = stat.icon;
           return (
             <div key={stat.name} className="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200 hover:shadow-md transition-shadow">
-              <div className="p-6">
+              <div className="p-4 sm:p-6">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
-                    <div className="w-12 h-12 bg-indigo-50 rounded-lg flex items-center justify-center">
-                      <Icon className="h-6 w-6 text-indigo-600" />
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-indigo-50 rounded-lg flex items-center justify-center">
+                      <Icon className="h-5 w-5 sm:h-6 sm:w-6 text-indigo-600" />
                     </div>
                   </div>
-                  <div className="ml-5 w-0 flex-1">
+                  <div className="ml-3 sm:ml-5 w-0 flex-1">
                     <dl>
-                      <dt className="text-sm font-medium text-gray-500 truncate">
+                      <dt className="text-xs sm:text-sm font-medium text-gray-500 truncate">
                         {stat.name}
                       </dt>
                       <dd className="flex items-baseline">
-                        <div className="text-2xl font-semibold text-gray-900">
+                        <div className="text-lg sm:text-2xl font-semibold text-gray-900">
                           {stat.value}
                         </div>
-                        <div className={`ml-2 flex items-baseline text-sm font-semibold ${
+                        <div className={`ml-2 flex items-baseline text-xs sm:text-sm font-semibold ${
                           stat.changeType === 'positive' ? 'text-green-600' : 'text-red-600'
                         }`}>
                           {stat.changeType === 'positive' ? (
-                            <TrendingUp className="self-center flex-shrink-0 h-4 w-4" />
+                            <TrendingUp className="self-center flex-shrink-0 h-3 w-3 sm:h-4 sm:w-4" />
                           ) : (
-                            <TrendingUp className="self-center flex-shrink-0 h-4 w-4 transform rotate-180" />
+                            <TrendingUp className="self-center flex-shrink-0 h-3 w-3 sm:h-4 sm:w-4 transform rotate-180" />
                           )}
                           <span className="sr-only">
                             {stat.changeType === 'positive' ? 'Increased' : 'Decreased'} by
                           </span>
-                          {stat.change}
+                          <span className="hidden sm:inline">{stat.change}</span>
+                          <span className="sm:hidden">{stat.change.replace(' from last month', '')}</span>
                         </div>
                       </dd>
                     </dl>
@@ -163,49 +171,50 @@ const Dashboard = () => {
         })}
       </div>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-2">
         {/* Alerts */}
         <div className="bg-white shadow-sm rounded-lg border border-gray-200">
-          <div className="px-6 py-5">
-            <h3 className="text-lg leading-6 font-semibold text-gray-900 mb-4">
+          <div className="p-4 sm:px-6 sm:py-5">
+            <h3 className="text-base sm:text-lg leading-6 font-semibold text-gray-900 mb-3 sm:mb-4">
               Active Alerts
             </h3>
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {alerts.map((alert) => (
-                <div key={alert.id} className={`p-4 rounded-md ${
+                <div key={alert.id} className={`p-3 sm:p-4 rounded-md ${
                   alert.type === 'urgent' ? 'bg-red-50 border border-red-200' :
                   alert.type === 'warning' ? 'bg-yellow-50 border border-yellow-200' :
                   'bg-blue-50 border border-blue-200'
                 }`}>
                   <div className="flex">
                     <div className="flex-shrink-0">
-                      <AlertTriangle className={`h-5 w-5 ${
+                      <AlertTriangle className={`h-4 w-4 sm:h-5 sm:w-5 ${
                         alert.type === 'urgent' ? 'text-red-400' :
                         alert.type === 'warning' ? 'text-yellow-400' :
                         'text-blue-400'
                       }`} />
                     </div>
-                    <div className="ml-3 flex-1">
-                      <h4 className={`text-sm font-medium ${
+                    <div className="ml-2 sm:ml-3 flex-1">
+                      <h4 className={`text-xs sm:text-sm font-medium ${
                         alert.type === 'urgent' ? 'text-red-800' :
                         alert.type === 'warning' ? 'text-yellow-800' :
                         'text-blue-800'
                       }`}>
                         {alert.title}
                       </h4>
-                      <p className={`mt-1 text-sm ${
+                      <p className={`mt-1 text-xs sm:text-sm ${
                         alert.type === 'urgent' ? 'text-red-700' :
                         alert.type === 'warning' ? 'text-yellow-700' :
                         'text-blue-700'
                       }`}>
                         {alert.message}
                       </p>
-                      <button className={`mt-2 text-sm font-medium ${
+                      <button className={`mt-2 text-xs sm:text-sm font-medium ${
                         alert.type === 'urgent' ? 'text-red-600 hover:text-red-500' :
                         alert.type === 'warning' ? 'text-yellow-600 hover:text-yellow-500' :
                         'text-blue-600 hover:text-blue-500'
                       }`}>
-                        {alert.action} →
+                        <span className="hidden sm:inline">{alert.action} →</span>
+                        <span className="sm:hidden">View →</span>
                       </button>
                     </div>
                   </div>
@@ -217,31 +226,31 @@ const Dashboard = () => {
 
         {/* Recent Activity */}
         <div className="bg-white shadow-sm rounded-lg border border-gray-200">
-          <div className="px-6 py-5">
-            <h3 className="text-lg leading-6 font-semibold text-gray-900 mb-4">
+          <div className="p-4 sm:px-6 sm:py-5">
+            <h3 className="text-base sm:text-lg leading-6 font-semibold text-gray-900 mb-3 sm:mb-4">
               Recent Activity
             </h3>
             <div className="flow-root">
-              <ul className="-mb-8">
+              <ul className="-mb-6 sm:-mb-8">
                 {recentActivity.map((item, itemIdx) => {
                   const Icon = item.icon;
                   return (
                     <li key={item.id}>
-                      <div className="relative pb-8">
+                      <div className="relative pb-6 sm:pb-8">
                         {itemIdx !== recentActivity.length - 1 ? (
-                          <span className="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200" />
+                          <span className="absolute top-3 sm:top-4 left-3 sm:left-4 -ml-px h-full w-0.5 bg-gray-200" />
                         ) : null}
-                        <div className="relative flex space-x-3">
+                        <div className="relative flex space-x-2 sm:space-x-3">
                           <div>
-                            <span className="h-8 w-8 rounded-full bg-gray-50 flex items-center justify-center ring-8 ring-white">
-                              <Icon className={`h-4 w-4 ${item.iconColor}`} />
+                            <span className="h-6 w-6 sm:h-8 sm:w-8 rounded-full bg-gray-50 flex items-center justify-center ring-4 sm:ring-8 ring-white">
+                              <Icon className={`h-3 w-3 sm:h-4 sm:w-4 ${item.iconColor}`} />
                             </span>
                           </div>
-                          <div className="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
+                          <div className="min-w-0 flex-1 pt-1 sm:pt-1.5 flex flex-col sm:flex-row sm:justify-between space-y-1 sm:space-y-0 sm:space-x-4">
                             <div>
-                              <p className="text-sm text-gray-900">{item.message}</p>
+                              <p className="text-xs sm:text-sm text-gray-900 leading-tight">{item.message}</p>
                             </div>
-                            <div className="text-right text-sm whitespace-nowrap text-gray-500">
+                            <div className="text-left sm:text-right text-xs text-gray-500">
                               {item.timestamp}
                             </div>
                           </div>

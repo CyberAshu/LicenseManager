@@ -8,12 +8,20 @@ import {
   AlertTriangle,
   CheckCircle,
   Clock,
-  FileText
+  FileText,
+  X,
+  MapPin,
+  Radio,
+  Calendar,
+  Shield,
+  Activity
 } from 'lucide-react';
 
 const Licenses = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
+  const [previewLicense, setPreviewLicense] = useState(null);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   const sampleLicenses = [
     {
@@ -99,6 +107,18 @@ const Licenses = () => {
     return matchesSearch && matchesFilter;
   });
 
+  // Handle license preview
+  const handlePreview = (license) => {
+    setPreviewLicense(license);
+    setIsPreviewOpen(true);
+  };
+
+  // Close preview modal
+  const closePreview = () => {
+    setIsPreviewOpen(false);
+    setPreviewLicense(null);
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -152,22 +172,23 @@ const Licenses = () => {
       </div>
 
       {/* Licenses Grid */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 xl:grid-cols-3">
         {filteredLicenses.map((license) => {
           const StatusIcon = getStatusIcon(license.status);
           return (
-            <div key={license.id} className="bg-white shadow-sm rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center">
-                  <FileText className="h-8 w-8 text-indigo-500 mr-3" />
-                  <div>
-                    <h3 className="text-lg font-medium text-gray-900">{license.callSign}</h3>
-                    <p className="text-sm text-gray-500">{license.id}</p>
+            <div key={license.id} className="bg-white shadow-sm rounded-lg border border-gray-200 p-4 sm:p-6 hover:shadow-md transition-shadow">
+              <div className="flex items-center justify-between mb-3 sm:mb-4">
+                <div className="flex items-center min-w-0 flex-1">
+                  <FileText className="h-6 w-6 sm:h-8 sm:w-8 text-indigo-500 mr-2 sm:mr-3 flex-shrink-0" />
+                  <div className="min-w-0">
+                    <h3 className="text-base sm:text-lg font-medium text-gray-900 truncate">{license.callSign}</h3>
+                    <p className="text-xs sm:text-sm text-gray-500 truncate">{license.id}</p>
                   </div>
                 </div>
-                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(license.status)}`}>
-                  <StatusIcon className="h-3 w-3 mr-1" />
-                  {license.status}
+                <span className={`inline-flex items-center px-2 py-1 sm:px-2.5 sm:py-0.5 rounded-full text-xs font-medium ${getStatusColor(license.status)} ml-2`}>
+                  <StatusIcon className="h-2 w-2 sm:h-3 sm:w-3 mr-1" />
+                  <span className="hidden sm:inline">{license.status}</span>
+                  <span className="sm:hidden">{license.status.split(' ')[0]}</span>
                 </span>
               </div>
 
@@ -220,7 +241,10 @@ const Licenses = () => {
               </div>
 
               <div className="mt-6 flex space-x-3">
-                <button className="flex-1 inline-flex justify-center items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                <button 
+                  onClick={() => handlePreview(license)}
+                  className="flex-1 inline-flex justify-center items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                >
                   <Eye className="h-4 w-4 mr-1" />
                   View
                 </button>
@@ -241,6 +265,158 @@ const Licenses = () => {
           <p className="mt-1 text-sm text-gray-500">
             No licenses match your current search criteria.
           </p>
+        </div>
+      )}
+
+      {/* Preview Modal */}
+      {isPreviewOpen && previewLicense && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl max-w-3xl w-full mx-4 max-h-[90vh] flex flex-col">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-6 border-b">
+              <div className="flex items-center">
+                <Radio className="h-6 w-6 text-indigo-500 mr-3" />
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    {previewLicense.callSign}
+                  </h3>
+                  <p className="text-sm text-gray-500">
+                    {previewLicense.licenseType} License • {previewLicense.id}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-2">
+                <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(previewLicense.status)}`}>
+                  <Activity className="h-4 w-4 mr-1" />
+                  {previewLicense.status}
+                </span>
+                <button
+                  onClick={closePreview}
+                  className="text-gray-400 hover:text-gray-600 p-2 rounded hover:bg-gray-100"
+                  title="Close Preview"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Body */}
+            <div className="flex-1 overflow-y-auto p-6">
+              <div className="space-y-6">
+                {/* License Holder Information */}
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <h4 className="text-md font-medium text-gray-900 mb-3">License Holder</h4>
+                  <div className="space-y-2">
+                    <div className="text-sm">
+                      <span className="font-medium text-gray-700">Name:</span>
+                      <span className="ml-2 text-gray-900">{previewLicense.licensee}</span>
+                    </div>
+                    <div className="text-sm">
+                      <span className="font-medium text-gray-700">Location:</span>
+                      <span className="ml-2 text-gray-900 flex items-center">
+                        <MapPin className="h-3 w-3 mr-1" />
+                        {previewLicense.region}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* License Details */}
+                <div className="bg-blue-50 rounded-lg p-4">
+                  <h4 className="text-md font-medium text-gray-900 mb-3">License Details</h4>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="text-sm">
+                      <span className="font-medium text-gray-700">Call Sign:</span>
+                      <p className="text-lg font-semibold text-blue-600">{previewLicense.callSign}</p>
+                    </div>
+                    <div className="text-sm">
+                      <span className="font-medium text-gray-700">License Type:</span>
+                      <p className="text-gray-900">{previewLicense.licenseType}</p>
+                    </div>
+                    <div className="text-sm">
+                      <span className="font-medium text-gray-700">Service Code:</span>
+                      <p className="text-gray-900">{previewLicense.serviceCode}</p>
+                    </div>
+                    <div className="text-sm">
+                      <span className="font-medium text-gray-700">Frequency Band:</span>
+                      <p className="text-gray-900">{previewLicense.frequencyBand}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Dates Information */}
+                <div className="bg-green-50 rounded-lg p-4">
+                  <h4 className="text-md font-medium text-gray-900 mb-3">Important Dates</h4>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="text-sm">
+                      <span className="font-medium text-gray-700 flex items-center">
+                        <Calendar className="h-4 w-4 mr-1" />
+                        Issue Date:
+                      </span>
+                      <p className="text-gray-900">{new Date(previewLicense.issuanceDate).toLocaleDateString()}</p>
+                    </div>
+                    <div className="text-sm">
+                      <span className="font-medium text-gray-700 flex items-center">
+                        <Calendar className="h-4 w-4 mr-1" />
+                        Expiry Date:
+                      </span>
+                      <p className="text-gray-900">{new Date(previewLicense.expiryDate).toLocaleDateString()}</p>
+                    </div>
+                  </div>
+                  
+                  {previewLicense.renewalDue && (
+                    <div className="mt-3 bg-yellow-100 border border-yellow-200 rounded-md p-3">
+                      <div className="flex items-center">
+                        <Clock className="h-4 w-4 text-yellow-500 mr-2" />
+                        <span className="text-sm font-medium text-yellow-800">Renewal Required Soon</span>
+                      </div>
+                      <p className="text-sm text-yellow-700 mt-1">
+                        This license is due for renewal. Please initiate the renewal process.
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Additional Information */}
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <h4 className="text-md font-medium text-gray-900 mb-3">Additional Information</h4>
+                  <div className="space-y-2">
+                    <div className="text-sm">
+                      <span className="font-medium text-gray-700">License ID:</span>
+                      <span className="ml-2 text-gray-900 font-mono">{previewLicense.id}</span>
+                    </div>
+                    <div className="text-sm">
+                      <span className="font-medium text-gray-700">Regulatory Authority:</span>
+                      <span className="ml-2 text-gray-900">Federal Communications Commission (FCC)</span>
+                    </div>
+                    <div className="text-sm">
+                      <span className="font-medium text-gray-700">License Classification:</span>
+                      <span className="ml-2 text-gray-900">{previewLicense.licenseType} - {previewLicense.serviceCode}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="flex items-center justify-between p-6 border-t bg-gray-50">
+              <div className="text-sm text-gray-500">
+                Last updated: {new Date().toLocaleDateString()}
+              </div>
+              <div className="flex items-center space-x-3">
+                <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors flex items-center">
+                  <Edit className="h-4 w-4 mr-2" />
+                  Edit License
+                </button>
+                <button
+                  onClick={closePreview}
+                  className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>

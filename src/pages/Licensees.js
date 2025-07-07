@@ -14,7 +14,11 @@ import {
   FileText,
   CheckCircle,
   Grid,
-  List
+  List,
+  X,
+  MapPin,
+  Calendar,
+  Activity
 } from 'lucide-react';
 import LicenseeCard from '../components/LicenseeCard';
 
@@ -24,6 +28,8 @@ const Licensees = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('all');
   const [viewMode, setViewMode] = useState('table'); // 'table' or 'cards'
+  const [previewLicensee, setPreviewLicensee] = useState(null);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   const [formData, setFormData] = useState({
     licenseeType: 'Individual',
@@ -151,6 +157,18 @@ const Licensees = () => {
     const matchesFilter = filterType === 'all' || licensee.type === filterType;
     return matchesSearch && matchesFilter;
   });
+
+  // Handle licensee preview
+  const handlePreview = (licensee) => {
+    setPreviewLicensee(licensee);
+    setIsPreviewOpen(true);
+  };
+
+  // Close preview modal
+  const closePreview = () => {
+    setIsPreviewOpen(false);
+    setPreviewLicensee(null);
+  };
 
   if (showForm) {
     return (
@@ -581,7 +599,11 @@ const Licensees = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <div className="flex space-x-2">
-                      <button className="text-indigo-600 hover:text-indigo-900">
+                      <button 
+                        onClick={() => handlePreview(licensee)}
+                        className="text-indigo-600 hover:text-indigo-900 p-1 rounded hover:bg-indigo-50"
+                        title="View Details"
+                      >
                         <Eye className="h-4 w-4" />
                       </button>
                       <button 
@@ -612,6 +634,138 @@ const Licensees = () => {
               onEdit={handleEdit}
             />
           ))}
+        </div>
+      )}
+
+      {/* Preview Modal */}
+      {isPreviewOpen && previewLicensee && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] flex flex-col">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-6 border-b">
+              <div className="flex items-center">
+                {(() => {
+                  const TypeIcon = getTypeIcon(previewLicensee.type);
+                  return <TypeIcon className="h-6 w-6 text-indigo-500 mr-3" />;
+                })()}
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    {previewLicensee.name}
+                  </h3>
+                  <p className="text-sm text-gray-500">
+                    {previewLicensee.type} Licensee
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={closePreview}
+                className="text-gray-400 hover:text-gray-600 p-2 rounded hover:bg-gray-100"
+                title="Close Preview"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="flex-1 overflow-y-auto p-6">
+              <div className="space-y-6">
+                {/* Status Badge */}
+                <div className="flex items-center justify-between">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                    <Activity className="h-4 w-4 mr-1" />
+                    {previewLicensee.status}
+                  </span>
+                  <span className="text-sm text-gray-500">
+                    Last active: {previewLicensee.lastActivity}
+                  </span>
+                </div>
+
+                {/* Contact Information */}
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <h4 className="text-md font-medium text-gray-900 mb-3">Contact Information</h4>
+                  <div className="space-y-3">
+                    <div className="flex items-center">
+                      <Mail className="h-4 w-4 text-gray-400 mr-3" />
+                      <span className="text-sm text-gray-900">{previewLicensee.email}</span>
+                    </div>
+                    <div className="flex items-center">
+                      <Phone className="h-4 w-4 text-gray-400 mr-3" />
+                      <span className="text-sm text-gray-900">{previewLicensee.phone}</span>
+                    </div>
+                    <div className="flex items-center">
+                      <MapPin className="h-4 w-4 text-gray-400 mr-3" />
+                      <span className="text-sm text-gray-900">{previewLicensee.location}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* License Information */}
+                <div className="bg-blue-50 rounded-lg p-4">
+                  <h4 className="text-md font-medium text-gray-900 mb-3">License Information</h4>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        <FileText className="h-4 w-4 text-blue-500 mr-2" />
+                        <span className="text-sm font-medium text-gray-900">Total Licenses</span>
+                      </div>
+                      <span className="text-sm font-semibold text-blue-600">{previewLicensee.licenseCount}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        <Shield className="h-4 w-4 text-blue-500 mr-2" />
+                        <span className="text-sm font-medium text-gray-900">FCC Registration</span>
+                      </div>
+                      <span className="text-sm text-gray-600">{previewLicensee.fccNumber}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Additional Details */}
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <h4 className="text-md font-medium text-gray-900 mb-3">Additional Details</h4>
+                  <div className="space-y-2">
+                    <div className="text-sm">
+                      <span className="font-medium text-gray-700">Account Type:</span>
+                      <span className="ml-2 text-gray-600">{previewLicensee.type}</span>
+                    </div>
+                    <div className="text-sm">
+                      <span className="font-medium text-gray-700">Registration Date:</span>
+                      <span className="ml-2 text-gray-600">January 15, 2023</span>
+                    </div>
+                    <div className="text-sm">
+                      <span className="font-medium text-gray-700">Notes:</span>
+                      <p className="mt-1 text-gray-600">No special notes on file for this licensee.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="flex items-center justify-between p-6 border-t bg-gray-50">
+              <div className="text-sm text-gray-500">
+                Last updated: {new Date().toLocaleDateString()}
+              </div>
+              <div className="flex items-center space-x-3">
+                <button
+                  onClick={() => {
+                    closePreview();
+                    handleEdit(previewLicensee);
+                  }}
+                  className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors flex items-center"
+                >
+                  <Edit className="h-4 w-4 mr-2" />
+                  Edit
+                </button>
+                <button
+                  onClick={closePreview}
+                  className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
