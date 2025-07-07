@@ -214,10 +214,10 @@ const Messages = () => {
       updatedMessage.replies.push({
           id: Date.now(),
           from: {
-            name: 'Sarah Johnson',
+            name: 'Tarun Goud',
             email: 'tarun@licensemanager.com',
             type: 'Admin',
-            avatar: 'SJ'
+            avatar: 'TG'
           },
         content: replyText,
         timestamp: new Date().toISOString()

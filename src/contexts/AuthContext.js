@@ -28,10 +28,10 @@ export const AuthProvider = ({ children }) => {
     if (email === 'tarun@licensemanager.com' && password === 'admin@123') {
       const userData = {
         id: 1,
-        name: 'Sarah Johnson',
+        name: 'Tarun Goud',
         email: 'tarun@licensemanager.com',
         role: 'Administrator',
-        avatar: 'SJ',
+        avatar: 'TG',
         joinDate: '2023-01-15',
         lastLogin: new Date().toISOString(),
         permissions: ['all']
