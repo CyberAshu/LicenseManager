@@ -18,7 +18,7 @@ A comprehensive React application for managing FCC licenses, licensees, renewals
 - **Applications**: New license application review and processing
 - **Documents**: Document validation and tracking system
 - **Reports**: Report generation and export functionality
-- **Messages**: Communication interface between licensees and admins
+- **Messages**: Communication interface between licensees and support staff
 - **Activity Log**: Historical system activity tracking
 - **Help & Support**: Internal FAQs and contact information
 

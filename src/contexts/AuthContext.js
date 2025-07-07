@@ -25,13 +25,13 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     // Dummy authentication
-    if (email === 'admin@gmail.com' && password === 'admin@123') {
+    if (email === 'sarah.johnson@licensemanager.com' && password === 'admin@123') {
       const userData = {
         id: 1,
-        name: 'Admin User',
-        email: 'admin@gmail.com',
+        name: 'Sarah Johnson',
+        email: 'sarah.johnson@licensemanager.com',
         role: 'Administrator',
-        avatar: 'AU',
+        avatar: 'SJ',
         joinDate: '2023-01-15',
         lastLogin: new Date().toISOString(),
         permissions: ['all']
@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
     } else {
       return { 
         success: false, 
-        error: 'Invalid email or password. Please use admin@gmail.com / admin@123' 
+        error: 'Invalid email or password. Please use sarah.johnson@licensemanager.com / admin@123' 
       };
     }
   };

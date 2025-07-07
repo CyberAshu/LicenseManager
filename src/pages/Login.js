@@ -65,7 +65,7 @@ const Login = () => {
 
   const fillDemoCredentials = () => {
     setFormData({
-      email: 'admin@gmail.com',
+      email: 'sarah.johnson@licensemanager.com',
       password: 'admin@123'
     });
     setError('');
@@ -161,7 +161,7 @@ const Login = () => {
                 <div className="space-y-2 text-sm">
                   <div>
                     <span className="font-medium text-green-700">Email:</span>
-                    <span className="ml-2 text-green-600 font-mono">admin@gmail.com</span>
+                    <span className="ml-2 text-green-600 font-mono">sarah.johnson@licensemanager.com</span>
                   </div>
                   <div>
                     <span className="font-medium text-green-700">Password:</span>

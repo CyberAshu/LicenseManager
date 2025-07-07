@@ -212,13 +212,13 @@ const Messages = () => {
       // Update message status to replied
       const updatedMessage = { ...selectedMessage };
       updatedMessage.replies.push({
-        id: Date.now(),
-        from: {
-          name: 'You (Admin)',
-          email: 'admin@licensemanager.com',
-          type: 'Admin',
-          avatar: 'AD'
-        },
+          id: Date.now(),
+          from: {
+            name: 'Sarah Johnson',
+            email: 'sarah.johnson@licensemanager.com',
+            type: 'Admin',
+            avatar: 'SJ'
+          },
         content: replyText,
         timestamp: new Date().toISOString()
       });

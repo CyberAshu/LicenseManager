@@ -131,60 +131,12 @@ const Layout = ({ children }) => {
                 })}
               </nav>
             </div>
-            
-            {/* Desktop Profile Section */}
-            <div className="flex-shrink-0 flex border-t border-gray-200 p-4">
-              <div className="flex items-center w-full">
-                <div className="w-9 h-9 bg-indigo-100 rounded-full flex items-center justify-center mr-3">
-                  <User className="h-5 w-5 text-indigo-600" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-700 truncate">{user?.name}</p>
-                  <p className="text-xs text-gray-500 truncate">{user?.role}</p>
-                </div>
-                <div className="relative">
-                  <button
-                    onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                    className="p-1 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  >
-                    <Settings className="h-4 w-4" />
-                  </button>
-                  
-                  {profileDropdownOpen && (
-                    <div className="absolute bottom-full right-0 mb-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
-                      <div className="py-1">
-                        <button
-                          onClick={() => {
-                            navigate('/profile');
-                            setProfileDropdownOpen(false);
-                          }}
-                          className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        >
-                          <User className="h-4 w-4 mr-3" />
-                          Profile Settings
-                        </button>
-                        <button
-                          onClick={() => {
-                            logout();
-                            setProfileDropdownOpen(false);
-                          }}
-                          className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50"
-                        >
-                          <LogOut className="h-4 w-4 mr-3" />
-                          Sign Out
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
 
       <div className="flex flex-col w-0 flex-1 overflow-hidden">
-        {/* Mobile header */}
+{/* Mobile header */}
         <div className="md:hidden bg-white shadow-sm border-b border-gray-200">
           <div className="flex items-center justify-between px-4 py-3">
             <button
@@ -194,14 +146,15 @@ const Layout = ({ children }) => {
             >
               <Menu className="h-6 w-6" />
             </button>
-            <div className="flex items-center">
-              <div className="w-6 h-6 bg-indigo-600 rounded-md flex items-center justify-center mr-2">
+            <div className="flex items-center space-x-3">
+              <div className="w-6 h-6 bg-indigo-600 rounded-md flex items-center justify-center">
                 <FileText className="h-4 w-4 text-white" />
               </div>
-              <h1 className="text-lg font-semibold text-gray-900">License Manager</h1>
+              <div className="text-sm text-gray-700">
+                <p className="font-medium">{user?.name}</p>
+                <p className="text-xs text-gray-500">{user?.role}</p>
+              </div>
             </div>
-            
-            {/* Mobile Profile Menu */}
             <div className="relative">
               <button
                 onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
@@ -244,6 +197,60 @@ const Layout = ({ children }) => {
                 </div>
               )}
             </div>
+          </div>
+        </div>
+
+        {/* Desktop header */}
+        <div className="hidden md:flex md:items-center md:justify-between md:px-4 md:py-3 md:shadow-sm md:border-b md:border-gray-200 bg-white">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-indigo-600 rounded-md flex items-center justify-center">
+              <FileText className="h-5 w-5 text-white" />
+            </div>
+            <div className="text-lg text-gray-700">
+              <p className="font-medium">{user?.name}</p>
+              <p className="text-sm text-gray-500">{user?.role}</p>
+            </div>
+          </div>
+          <div className="relative">
+            <button
+              onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+              className="flex items-center p-1 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              <div className="w-9 h-9 bg-indigo-100 rounded-full flex items-center justify-center">
+                <User className="h-5 w-5 text-indigo-600" />
+              </div>
+            </button>
+            
+            {profileDropdownOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+                <div className="p-3 border-b border-gray-200">
+                  <p className="text-sm font-medium text-gray-900 truncate">{user?.name}</p>
+                  <p className="text-xs text-gray-500 truncate">{user?.email}</p>
+                </div>
+                <div className="py-1">
+                  <button
+                    onClick={() => {
+                      navigate('/profile');
+                      setProfileDropdownOpen(false);
+                    }}
+                    className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    <Settings className="h-4 w-4 mr-3" />
+                    Profile Settings
+                  </button>
+                  <button
+                    onClick={() => {
+                      logout();
+                      setProfileDropdownOpen(false);
+                    }}
+                    className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                  >
+                    <LogOut className="h-4 w-4 mr-3" />
+                    Sign Out
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
         
