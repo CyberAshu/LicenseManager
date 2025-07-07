@@ -65,7 +65,7 @@ const Login = () => {
 
   const fillDemoCredentials = () => {
     setFormData({
-      email: 'sarah.johnson@licensemanager.com',
+      email: 'tarun@licensemanager.com',
       password: 'admin@123'
     });
     setError('');
@@ -126,56 +126,6 @@ const Login = () => {
               </p>
             </div>
 
-            {/* Demo Credentials Card */}
-            {!showDemo && (
-              <div className="mb-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-blue-500 mr-2" />
-                    <span className="text-sm font-medium text-blue-800">Demo Available</span>
-                  </div>
-                  <button
-                    onClick={() => setShowDemo(true)}
-                    className="text-xs text-blue-600 hover:text-blue-800 font-medium"
-                  >
-                    Show Credentials
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {showDemo && (
-              <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4">
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
-                    <span className="text-sm font-medium text-green-800">Demo Credentials</span>
-                  </div>
-                  <button
-                    onClick={() => setShowDemo(false)}
-                    className="text-green-400 hover:text-green-600"
-                  >
-                    <Eye className="h-4 w-4" />
-                  </button>
-                </div>
-                <div className="space-y-2 text-sm">
-                  <div>
-                    <span className="font-medium text-green-700">Email:</span>
-                    <span className="ml-2 text-green-600 font-mono">sarah.johnson@licensemanager.com</span>
-                  </div>
-                  <div>
-                    <span className="font-medium text-green-700">Password:</span>
-                    <span className="ml-2 text-green-600 font-mono">admin@123</span>
-                  </div>
-                </div>
-                <button
-                  onClick={fillDemoCredentials}
-                  className="mt-3 w-full text-xs text-green-600 hover:text-green-800 font-medium bg-green-100 hover:bg-green-200 py-2 rounded-md transition-colors"
-                >
-                  Auto-fill Demo Credentials
-                </button>
-              </div>
-            )}
 
             {/* Error Message */}
             {error && (

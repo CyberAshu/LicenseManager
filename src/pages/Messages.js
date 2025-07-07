@@ -215,7 +215,7 @@ const Messages = () => {
           id: Date.now(),
           from: {
             name: 'Sarah Johnson',
-            email: 'sarah.johnson@licensemanager.com',
+            email: 'tarun@licensemanager.com',
             type: 'Admin',
             avatar: 'SJ'
           },
