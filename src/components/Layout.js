@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import { 
   Home, 
   Users, 
@@ -13,11 +14,18 @@ import {
   HelpCircle,
   Menu,
   X,
-  CheckCircle
+  CheckCircle,
+  User,
+  LogOut,
+  Settings,
+  ChevronDown
 } from 'lucide-react';
 
 const Layout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   const navigation = [
     { name: 'Dashboard', href: '/', icon: Home },
@@ -123,6 +131,54 @@ const Layout = ({ children }) => {
                 })}
               </nav>
             </div>
+            
+            {/* Desktop Profile Section */}
+            <div className="flex-shrink-0 flex border-t border-gray-200 p-4">
+              <div className="flex items-center w-full">
+                <div className="w-9 h-9 bg-indigo-100 rounded-full flex items-center justify-center mr-3">
+                  <User className="h-5 w-5 text-indigo-600" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-gray-700 truncate">{user?.name}</p>
+                  <p className="text-xs text-gray-500 truncate">{user?.role}</p>
+                </div>
+                <div className="relative">
+                  <button
+                    onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                    className="p-1 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  >
+                    <Settings className="h-4 w-4" />
+                  </button>
+                  
+                  {profileDropdownOpen && (
+                    <div className="absolute bottom-full right-0 mb-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+                      <div className="py-1">
+                        <button
+                          onClick={() => {
+                            navigate('/profile');
+                            setProfileDropdownOpen(false);
+                          }}
+                          className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                          <User className="h-4 w-4 mr-3" />
+                          Profile Settings
+                        </button>
+                        <button
+                          onClick={() => {
+                            logout();
+                            setProfileDropdownOpen(false);
+                          }}
+                          className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                        >
+                          <LogOut className="h-4 w-4 mr-3" />
+                          Sign Out
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -144,7 +200,50 @@ const Layout = ({ children }) => {
               </div>
               <h1 className="text-lg font-semibold text-gray-900">License Manager</h1>
             </div>
-            <div className="w-10"></div> {/* Spacer for centering */}
+            
+            {/* Mobile Profile Menu */}
+            <div className="relative">
+              <button
+                onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                className="flex items-center p-1 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              >
+                <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
+                  <User className="h-4 w-4 text-indigo-600" />
+                </div>
+              </button>
+              
+              {profileDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+                  <div className="p-3 border-b border-gray-200">
+                    <p className="text-sm font-medium text-gray-900 truncate">{user?.name}</p>
+                    <p className="text-xs text-gray-500 truncate">{user?.email}</p>
+                  </div>
+                  <div className="py-1">
+                    <button
+                      onClick={() => {
+                        navigate('/profile');
+                        setProfileDropdownOpen(false);
+                        setSidebarOpen(false);
+                      }}
+                      className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      <Settings className="h-4 w-4 mr-3" />
+                      Profile Settings
+                    </button>
+                    <button
+                      onClick={() => {
+                        logout();
+                        setProfileDropdownOpen(false);
+                      }}
+                      className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                    >
+                      <LogOut className="h-4 w-4 mr-3" />
+                      Sign Out
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
         
